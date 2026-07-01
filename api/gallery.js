@@ -18,10 +18,6 @@ export default async function handler(req, res) {
 
   const data = await response.json();
 
-  // Keep only images inside the portfolio folder
-  const images = (data.resources || []).filter(
-    (img) => img.public_id.startsWith("portfolio/")
-  );
-
-  res.status(200).json(images);
+  // Return all images
+  res.status(200).json(data.resources || []);
 }
