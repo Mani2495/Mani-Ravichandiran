@@ -143,14 +143,19 @@ async function loadGallery() {
     gallery.innerHTML = "";
 
     images.forEach((img) => {
+      const name =
+        img.display_name ||
+        (img.public_id ? img.public_id.split("/").pop() : "Project");
+
       gallery.innerHTML += `
         <div class="project-card">
           <a href="${img.secure_url}" target="_blank">
-            <img src="${img.secure_url}" alt="Project">
+            <img src="${img.secure_url}" alt="${name}">
           </a>
-          <h3>${img.public_id.split("/").pop()}</h3>
+          <h3>${name}</h3>
           <p>Manufacturing Project</p>
-        </div>`;
+        </div>
+      `;
     });
   } catch (e) {
     console.log(e);
