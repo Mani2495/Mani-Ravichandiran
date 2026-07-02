@@ -6,7 +6,11 @@
     <title>Mani Ravichandiran | Manufacturing Engineer</title>
     <meta name="description" content="Portfolio of Mani Ravichandiran, Manufacturing Engineer, Mechanical Design Engineer, and CNC Programmer based in Singapore." />
     <link rel="stylesheet" href="styles.css" />
-  </head>
+  <style>
+.folder-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+.folder-buttons button{padding:10px 16px;border:none;border-radius:20px;cursor:pointer;}
+</style>
+</head>
   <body>
     <header class="hero" id="top">
       <nav class="nav" aria-label="Main navigation">
@@ -124,6 +128,16 @@
       
       <section class="section" id="designs">
         <h2>Projects Gallery</h2>
+
+        <div class="folder-buttons">
+          <button onclick="loadGallery('CNC-Machining')">CNC Machining</button>
+          <button onclick="loadGallery('Fixture-Design')">Fixture Design</button>
+          <button onclick="loadGallery('CAD-Models')">CAD Models</button>
+          <button onclick="loadGallery('Aerospace')">Aerospace</button>
+          <button onclick="loadGallery('Production')">Production</button>
+          <button onclick="loadGallery('Certificates')">Certificates</button>
+        </div>
+
         <button id="uploadBtn" style="padding:10px 20px;margin-bottom:20px;cursor:pointer;">
           Upload Project Image
         </button>
@@ -134,10 +148,12 @@
 <script>
 const cloudName = "xccni8sp";
 const uploadPreset = "Portfolio";
+let currentFolder = "CNC-Machining";
 
-async function loadGallery() {
+async function loadGallery(folder = "CNC-Machining") {
+  currentFolder = folder;
   try {
-    const response = await fetch("/api/gallery");
+    const response = await fetch(`/api/gallery?folder=${folder}`);
     const images = await response.json();
     const gallery = document.getElementById("gallery");
     gallery.innerHTML = "";
@@ -153,7 +169,7 @@ async function loadGallery() {
             <img src="${img.secure_url}" alt="${name}">
           </a>
           <h3>${name}</h3>
-          <p>Manufacturing Project</p>
+          <p>${folder.replaceAll("-", " ")}</p>
         </div>
       `;
     });
@@ -189,7 +205,7 @@ document.getElementById("fileInput").onchange = async (e) => {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", uploadPreset);
-  formData.append("folder", "portfolio");
+  formData.append("folder", `portfolio/${currentFolder}`);
 
   const response = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
