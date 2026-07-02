@@ -10,11 +10,17 @@ export default async function handler(req, res) {
   ).toString("base64");
 
   const response = await fetch(
-    `https://api.cloudinary.com/v1_1/${cloudName}/resources/image?prefix=portfolio/${folder}/&max_results=100`,
+    `https://api.cloudinary.com/v1_1/${cloudName}/resources/search`,
     {
+      method: "POST",
       headers: {
-        Authorization: `Basic ${auth}`
-      }
+        Authorization: `Basic ${auth}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        expression: `folder="portfolio/${folder}"`,
+        max_results: 100,
+      }),
     }
   );
 
